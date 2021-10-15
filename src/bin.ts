@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import yargs from 'yargs/yargs'
 import { findFiles } from './find-files'
 import { scanForTodos } from './scan-for-todos'
