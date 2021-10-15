@@ -13,7 +13,7 @@ describe('syncWithGithub', () => {
     const todos = await scanForTodos(root, files)
     const issues = groupTodosToIssues(todos)
     const mockGithubClient = new MockGithubClient()
-    await syncWithGitHub(issues, mockGithubClient)
+    await syncWithGitHub(issues, mockGithubClient, 'TODO')
     expect(mockGithubClient.log).toMatchSnapshot()
 
     await updateReferences(root,issues)

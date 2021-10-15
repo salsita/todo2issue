@@ -6,8 +6,10 @@ Object {
     "**/*.ts?(x)",
     "**/*.js?(x)",
   ],
+  "githubToken": "9f34b25031f006e5df9e5e8178e18df9f162f962",
+  "issueLabel": "TODO",
   "repo": Object {
-    "name": "todo2issue-sample",
+    "name": "todo2issue",
     "owner": "salsita",
   },
 }

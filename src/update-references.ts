@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-import { Issue, Todo } from './model'
+import { Issue, Todo, groupTodosByFile } from './model'
 import { readFile, writeFile } from 'fs/promises'
 import escapeRegexp from 'escape-string-regexp'
 
@@ -10,19 +10,7 @@ export async function updateReferences (root: string, issues: Issue[]) {
       .map(todo => ({ ...todo, issueNumber: issue.issueNumber }))
   )
 
-  const updatesByFile = updates.reduce(
-    (map, todo) => {
-      let fileUpdates = map.get(todo.filename)
-      if (fileUpdates) {
-        fileUpdates.push(todo)
-      } else {
-        fileUpdates = [todo]
-        map.set(todo.filename, fileUpdates)
-      }
-      return map
-    },
-    new Map<string, Todo[]>()
-  )
+  const updatesByFile = groupTodosByFile(updates)
 
   for (const [filename, todos] of updatesByFile.entries()) {
     const absoluteFilename = resolve(root, filename)

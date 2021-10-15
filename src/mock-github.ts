@@ -5,13 +5,13 @@ export class MockGithubClient implements GithubClient {
   private issueNumberCounter = 0
   public readonly log: string[] = []
 
-  async createIssue (issue: Issue): Promise<number> {
+  async createIssue (issue: Issue, issueLabel: string, commitHash: string): Promise<number> {
     const issueNumber = ++this.issueNumberCounter
     this.log.push(`created issue #${issueNumber} for ${issue.todos[0].text}`)
     return issueNumber
   }
 
-  async listOpenTodoIssueNumbers (): Promise<number[]> {
+  async listOpenTodoIssueNumbers (issueLabel: string): Promise<number[]> {
     const issueNumbers = [123, 124, 125, 126]
     this.log.push(`listed issues ${issueNumbers.map(issueNumber => `#${issueNumber}`).join(', ')}`)
     return issueNumbers
