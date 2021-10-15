@@ -1,0 +1,12 @@
+{
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/salsita/todo2issue-sample.git"
+  },
+  "todo2issue": {
+    "filePatterns": [
+      "**/*.ts?(x)",
+      "**/*.js?(x)"
+    ]
+  }
+}

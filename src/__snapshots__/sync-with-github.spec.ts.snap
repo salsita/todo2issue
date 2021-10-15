@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`syncWithGithub syncs 1`] = `
+Array [
+  "created issue #1 for Single line todo comment",
+  "created issue #2 for line comments",
+  "created issue #3 for line comments with reference",
+  "created issue #4 for With colon",
+  "created issue #5 for This one is from a sub-folder",
+  "listed issues #123, #124, #125, #126",
+  "closed issues #126",
+]
+`;

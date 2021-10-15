@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`readRepositoryConfig reads 1`] = `
+Object {
+  "filePatterns": Array [
+    "**/*.ts?(x)",
+    "**/*.js?(x)",
+  ],
+  "repo": Object {
+    "name": "todo2issue-sample",
+    "owner": "salsita",
+  },
+}
+`;

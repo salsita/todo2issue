@@ -8,8 +8,6 @@ describe('groupTodosToIssues',() => {
     const files = await findFiles(resolve(__dirname, '../sample'), ['**/*.[tj]s?(x)'])
     const todos = await scanForTodos(resolve(__dirname, '../sample'), files)
     const issues = groupTodosToIssues(todos)
-    console.log(Object.fromEntries(
-      issues.map(issue => [issue.todos[0].text,issue.todos.length])
-    ))
+    expect(issues).toMatchSnapshot()
   })
 })
