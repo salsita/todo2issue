@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "outDir": "lib",
+    "rootDir": "src",
+    "moduleResolution": "Node",
+    "esModuleInterop": true
+  },
+  "include": [
+    "src"
+  ]
+}
