@@ -7,14 +7,17 @@ import { updateReferences } from './update-references'
 import { readConfig } from './config'
 import { RestGithubClient } from './github'
 import { getCurrentCommitHash } from './git'
+import { WriteMockGithubClient } from './mock-github'
 
 async function run (args: string[]) {
   const { argv } = yargs(args).options({
     't': { type: 'string', alias: 'token' },
-    'd': { type: 'string', default: process.cwd(), alias: 'directory' }
+    'r': { type: 'string', default: process.cwd(), alias: 'root' },
+    'd': { type: 'boolean', default: false, alias: 'dry-run' }
   })
-  const root = argv['d']
-  const token = argv['t']
+  const token = argv['token']
+  const root = argv['root']
+  const dryRun = argv['dry-run']
 
   const config = await readConfig(root, token)
   const files = await findFiles(root, config.filePatterns)
@@ -23,7 +26,18 @@ async function run (args: string[]) {
   const commitHash = await getCurrentCommitHash(root)
 
   const githubClient = new RestGithubClient(config.repo, config.githubToken)
-  await syncWithGitHub(issues, githubClient, config.issueLabel, commitHash)
+  const mockGithubClient = new WriteMockGithubClient(githubClient)
+  await syncWithGitHub(
+    issues,
+    dryRun ? mockGithubClient : githubClient,
+    config.issueLabel,
+    commitHash
+  )
+
+  if (dryRun) {
+    console.log(mockGithubClient.log.join('\n'))
+  }
+
   await updateReferences(root, issues)
 }
 
