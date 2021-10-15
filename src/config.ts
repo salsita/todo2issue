@@ -25,10 +25,10 @@ const defaultConfig: Partial<Config> = {
   issueLabel: 'TODO'
 }
 
-export async function readConfig (root: string): Promise<Config> {
+export async function readConfig (root: string, githubTokenOverride?: string): Promise<Config> {
   const envFile = resolve(root,'.env')
-  const dotenv = existsSync(envFile) && parseDotenv(await readFile(envFile))
-  const githubToken = process.env.GITHUB_TOKEN ?? dotenv.GITHUB_TOKEN
+  const dotenv = !githubTokenOverride && existsSync(envFile) && parseDotenv(await readFile(envFile))
+  const githubToken = githubTokenOverride ?? process.env.GITHUB_TOKEN ?? dotenv?.GITHUB_TOKEN
 
   const {
     repository,
@@ -53,7 +53,7 @@ export async function readConfig (root: string): Promise<Config> {
   }
 
   if (!githubToken || issueLabel.trim() === '') {
-    throw new Error(`Github personal token missing, please provide it through 'GITHUB_TOKEN' environment variable ('.env' is supported)`)
+    throw new Error(`Github personal token missing, please provide it either through 'GITHUB_TOKEN' environment variable ('.env' is supported) or as a command line option ('-t')`)
   }
 
   return {

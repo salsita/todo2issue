@@ -4,7 +4,6 @@ import { scanForTodos } from './scan-for-todos'
 import { groupTodosToIssues } from './group-todos-to-issues'
 import { syncWithGitHub } from './sync-with-github'
 import { MockGithubClient } from './mock-github'
-import { updateReferences } from './update-references'
 
 describe('syncWithGithub', () => {
   it('syncs', async () => {
@@ -13,9 +12,7 @@ describe('syncWithGithub', () => {
     const todos = await scanForTodos(root, files)
     const issues = groupTodosToIssues(todos)
     const mockGithubClient = new MockGithubClient()
-    await syncWithGitHub(issues, mockGithubClient, 'TODO')
+    await syncWithGitHub(issues, mockGithubClient, 'TODO', 'master')
     expect(mockGithubClient.log).toMatchSnapshot()
-
-    await updateReferences(root,issues)
   })
 })

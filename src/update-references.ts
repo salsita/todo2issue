@@ -20,6 +20,7 @@ export async function updateReferences (root: string, issues: Issue[]) {
       lines[todo.line - 1] = updateReference(lines[todo.line - 1], todo)
     })
     await writeFile(absoluteFilename, lines.join(''), 'utf8')
+    console.log(`updated file '${filename}'`)
   }
 }
 

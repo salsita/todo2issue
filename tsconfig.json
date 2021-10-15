@@ -4,7 +4,12 @@
     "outDir": "lib",
     "rootDir": "src",
     "moduleResolution": "Node",
-    "esModuleInterop": true
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "tsBuildInfoFile": "./tsconfig.tsbuildinfo",
+    "composite": true,
+    "sourceMap": true,
+    "declaration": true
   },
   "include": [
     "src"

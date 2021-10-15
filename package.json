@@ -4,7 +4,12 @@
   "description": "CLI tool for in-code TODO synchronization to GitHub issues",
   "main": "lib/index.js",
   "scripts": {
-    "test": "jest --config jest.config.js"
+    "test": "jest --config jest.config.js",
+    "build": "tsc -b",
+    "watch": "tsc -b -w"
+  },
+  "bin": {
+    "todo2issue": "./lib/bin.js"
   },
   "repository": {
     "type": "git",
