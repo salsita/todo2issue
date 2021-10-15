@@ -25,6 +25,7 @@
   "homepage": "https://github.com/salsita/todo2issue#readme",
   "dependencies": {
     "dotenv": "^10.0.0",
+    "escape-string-regexp": "^4.0.0",
     "git-url-parse": "^11.6.0",
     "globby": "^11.0.4",
     "leasot": "^12.0.0",
