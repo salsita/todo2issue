@@ -8,6 +8,6 @@ Array [
   "created issue #4 for With colon",
   "created issue #5 for This one is from a sub-folder",
   "listed issues #123, #124, #125, #126",
-  "closed issues #126",
+  "close issues #126",
 ]
 `;
