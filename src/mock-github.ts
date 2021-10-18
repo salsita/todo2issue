@@ -23,8 +23,11 @@ export class MockGithubClient implements GithubClient {
 }
 
 export class WriteMockGithubClient extends MockGithubClient {
-  constructor (private realClient: GithubClient) {
+  constructor (private realClient: GithubClient, firstGeneratedId?: number) {
     super()
+    if (firstGeneratedId) {
+      this.issueNumberCounter = firstGeneratedId - 1
+    }
   }
 
   async createIssue (issue: Issue, issueLabel: string, commitHash: string): Promise<number> {

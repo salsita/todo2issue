@@ -4,11 +4,13 @@ import { readFile, writeFile } from 'fs/promises'
 import escapeRegexp from 'escape-string-regexp'
 
 export async function updateReferences (root: string, issues: Issue[]) {
-  const updates = issues.flatMap(issue =>
-    issue.todos
-      .filter(todo => todo.issueNumber === undefined)
-      .map(todo => ({ ...todo, issueNumber: issue.issueNumber }))
-  )
+  const updates = issues
+    .filter(issue => issue.issueNumber !== undefined)
+    .flatMap(issue =>
+      issue.todos
+        .filter(todo => todo.issueNumber === undefined)
+        .map(todo => ({ ...todo, issueNumber: issue.issueNumber }))
+    )
 
   const updatesByFile = groupTodosByFile(updates)
 
