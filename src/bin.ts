@@ -16,12 +16,12 @@ async function run (args: string[]) {
     't': { type: 'string', alias: 'token' },
     'r': { type: 'string', default: process.cwd(), alias: 'root' },
     'd': { type: 'boolean', default: false, alias: 'dry-run' },
-    'x': { type: 'number', alias: 'first-generated-id' },
+    's': { type: 'string', alias: 'sequence' }
   })
   const token = argv['token']
   const root = argv['root']
   const dryRun = argv['dry-run']
-  const firstGeneratedId = argv['first-generated-id']
+  const [sequenceStart, sequenceEnd] = argv['sequence']?.split(':').map(Number) ?? []
 
   const config = await readConfig(root, token)
   const files = await findFiles(root, config.filePatterns)
@@ -30,7 +30,7 @@ async function run (args: string[]) {
   const commitHash = await getCurrentCommitHash(root)
 
   const githubClient = new RestGithubClient(config.repo, config.githubToken)
-  const mockGithubClient = new WriteMockGithubClient(githubClient, firstGeneratedId)
+  const mockGithubClient = new WriteMockGithubClient(githubClient, sequenceStart, sequenceEnd)
   try {
     await syncWithGitHub(
       issues,
@@ -38,6 +38,8 @@ async function run (args: string[]) {
       config.issueLabel,
       commitHash
     )
+  } catch (e) {
+    console.error(e)
   } finally {
     if (dryRun) {
       console.log(mockGithubClient.log.join('\n'))
