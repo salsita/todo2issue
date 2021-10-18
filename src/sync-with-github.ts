@@ -1,17 +1,55 @@
 import { Issue } from './model'
 import { GithubClient } from './github'
+import { generateIssueBody } from './generate-issue-body'
+import { GitRepository } from './config'
+import { createBody, updateBody } from './update-issue-body'
 
-export async function syncWithGitHub (issues: Issue[], githubClient: GithubClient, issueLabel: string, commitHash: string) {
-  for (const issue of issues) {
-    if (issue.issueNumber === undefined) {
-      issue.issueNumber = await githubClient.createIssue(issue, issueLabel, commitHash)
-      console.log(`created issue #${issue.issueNumber}`)
-    }
+export async function syncWithGitHub (
+  issues: Issue[],
+  githubClient: GithubClient,
+  repo: GitRepository,
+  issueLabel: string,
+  commitish: string,
+  overwriteBody: boolean = false
+) {
+  const issuesToUpdate = issues.filter(issue => issue.issueNumber !== undefined)
+  const issuesToCreate = issues.filter(issue => issue.issueNumber === undefined)
+
+  for (const issue of issuesToCreate) {
+    const generatedContent = generateIssueBody(issue, repo, commitish)
+    const body = createBody(generatedContent)
+    issue.issueNumber = await githubClient.createIssue(issue, issueLabel, body)
+    console.log(`created issue #${issue.issueNumber}`)
   }
-  const githubIssues = new Set(await githubClient.listOpenTodoIssueNumbers(issueLabel))
-  issues.forEach(issue => githubIssues.delete(issue.issueNumber))
 
-  for (const obsoleteIssueNumber of githubIssues) {
+  const existingIssues = await githubClient.listOpenTodoIssues(issueLabel)
+  const existingIssuesByNumber = new Map(existingIssues.map(issue => [issue.issueNumber, issue]))
+
+  for (const issue of issuesToUpdate) {
+    const existingIssue = existingIssuesByNumber.get(issue.issueNumber)
+    if (!existingIssue) {
+      console.warn(`failed to update issue #${issue.issueNumber}, because it isn't present in GitHub or the '${issueLabel}' has been removed, consider removing the TODO`)
+      continue
+    }
+
+    const newGeneratedContent = generateIssueBody(issue, repo, commitish)
+    const {
+      updated,
+      body
+    } = overwriteBody
+      ? { updated: true, body: createBody(newGeneratedContent) }
+      : updateBody(existingIssue.body, newGeneratedContent)
+
+    if (!updated) {
+      continue
+    }
+
+    await githubClient.updateIssue(issue.issueNumber, body)
+    console.log(`updated issue #${issue.issueNumber}`)
+  }
+
+  issues.forEach(issue => existingIssuesByNumber.delete(issue.issueNumber))
+  for (const obsoleteIssueNumber of existingIssuesByNumber.keys()) {
     await githubClient.closeIssue(obsoleteIssueNumber)
     console.log(`closed issue #${obsoleteIssueNumber}`)
   }

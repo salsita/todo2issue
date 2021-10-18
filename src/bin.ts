@@ -16,18 +16,21 @@ async function run (args: string[]) {
     't': { type: 'string', alias: 'token' },
     'r': { type: 'string', default: process.cwd(), alias: 'root' },
     'd': { type: 'boolean', default: false, alias: 'dry-run' },
-    's': { type: 'string', alias: 'sequence' }
+    'o': { type: 'boolean', default: false, alias: 'overwrite-body' },
+    's': { type: 'string', alias: 'sequence' },
+    'c': { type: 'string', alias: 'commitish' }
   })
   const token = argv['token']
   const root = argv['root']
   const dryRun = argv['dry-run']
+  const overwriteBody = argv['overwrite-body']
   const [sequenceStart, sequenceEnd] = argv['sequence']?.split(':').map(Number) ?? []
+  const commitish = argv['commitish'] ?? await getCurrentCommitHash(root)
 
   const config = await readConfig(root, token)
   const files = await findFiles(root, config.filePatterns)
   const todos = await scanForTodos(root, files)
   const issues = groupTodosToIssues(todos)
-  const commitHash = await getCurrentCommitHash(root)
 
   const githubClient = new RestGithubClient(config.repo, config.githubToken)
   const mockGithubClient = new WriteMockGithubClient(githubClient, sequenceStart, sequenceEnd)
@@ -35,8 +38,10 @@ async function run (args: string[]) {
     await syncWithGitHub(
       issues,
       dryRun ? mockGithubClient : githubClient,
+      config.repo,
       config.issueLabel,
-      commitHash
+      commitish,
+      overwriteBody
     )
   } catch (e) {
     console.error(e)

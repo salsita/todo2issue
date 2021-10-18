@@ -1,11 +1,18 @@
-import { GithubClient } from './github'
+import { GithubClient, PartialGithubIssue } from './github'
 import { Issue } from './model'
+
+const mockIssues: PartialGithubIssue[] = [
+  {issueNumber: 123, body: 'Some'},
+  {issueNumber: 124, body: 'Somewhat else'},
+  {issueNumber: 125, body: 'Completely else'},
+  {issueNumber: 126, body: 'Different league'},
+]
 
 export class MockGithubClient implements GithubClient {
   protected issueNumberCounter: number | null = null
   public readonly log: string[] = []
 
-  async createIssue (issue: Issue, issueLabel: string, commitHash: string): Promise<number> {
+  async createIssue (issue: Issue, issueLabel: string, body: string): Promise<number> {
     if(this.issueNumberCounter === null) {
       this.issueNumberCounter = 0
     }
@@ -14,10 +21,13 @@ export class MockGithubClient implements GithubClient {
     return issueNumber
   }
 
-  async listOpenTodoIssueNumbers (issueLabel: string): Promise<number[]> {
-    const issueNumbers = [123, 124, 125, 126]
-    this.log.push(`listed issues ${issueNumbers.map(issueNumber => `#${issueNumber}`).join(', ')}`)
-    return issueNumbers
+  async updateIssue (issueNumber: number, body: string): Promise<void> {
+    this.log.push(`updated issue #${issueNumber}`)
+  }
+
+  async listOpenTodoIssues (issueLabel: string): Promise<PartialGithubIssue[]> {
+    this.log.push(`listed issues ${mockIssues.map(issue => `#${issue.issueNumber}`).join(', ')}`)
+    return mockIssues
   }
 
   async closeIssue (issueNumber: number) {
@@ -37,17 +47,18 @@ export class WriteMockGithubClient extends MockGithubClient {
     }
   }
 
-  async createIssue (issue: Issue, issueLabel: string, commitHash: string): Promise<number> {
+  async createIssue (issue: Issue, issueLabel: string, commitish: string): Promise<number> {
     if(this.issueNumberCounter === null) {
-      this.issueNumberCounter = Math.max(0, ...(await this.realClient.listOpenTodoIssueNumbers(issueLabel)))
+      const existingIssues = await this.realClient.listOpenTodoIssues(issueLabel)
+      this.issueNumberCounter = Math.max(0, ...existingIssues.map(issue => issue.issueNumber))
     }
     if (this.issueNumberCounter >= this.sequenceEnd) {
       throw new Error('sequence exhausted')
     }
-    return super.createIssue(issue, issueLabel, commitHash);
+    return super.createIssue(issue, issueLabel, commitish);
   }
 
-  async listOpenTodoIssueNumbers (issueLabel: string): Promise<number[]> {
-    return this.realClient.listOpenTodoIssueNumbers(issueLabel);
+  async listOpenTodoIssues (issueLabel: string): Promise<PartialGithubIssue[]> {
+    return this.realClient.listOpenTodoIssues(issueLabel);
   }
 }

@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`formatIssueBody formats description of issue 1`] = `
+"
+_This issue origins from a TODO within the code-base and was synchronized automatically._
+
+## Occurrences
+
+### \`sample/src/index.ts\`
+
+-  [line 1](https://github.com/salsita/todo2issue/blob/master/sample/src/index.ts#L1) - Single line todo comment
+-  [line 2](https://github.com/salsita/todo2issue/blob/master/sample/src/index.ts#L2) - Single line todo comment with reference
+ 
+"
+`;

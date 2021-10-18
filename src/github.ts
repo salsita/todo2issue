@@ -2,33 +2,19 @@ import { groupTodosByFile, Issue } from './model'
 import { Octokit } from '@octokit/rest'
 import { GitRepository } from './config'
 
-export interface GithubClient {
-  createIssue (issue: Issue, issueLabel: string, commitHash: string): Promise<number>
-
-  listOpenTodoIssueNumbers (issueLabel: string): Promise<number[]>
-
-  closeIssue (issueNumber: number)
+export interface PartialGithubIssue {
+  issueNumber: number
+  body: string
 }
 
-export function formatIssueBody (issue: Issue, repo: GitRepository, commitHash: string): string {
-  const todosByFile = groupTodosByFile(issue.todos)
-  const fileOccurrences = Array.from(todosByFile.entries())
-    .map(([filename, todos]) => {
-      const todoOccurrences = todos.map(todo =>
-        `-  [line ${todo.line}](https://github.com/${repo.owner}/${repo.name}/blob/${commitHash}/${filename}#L${todo.line}) - ${todo.text}`
-      )
-      return `
-### \`${filename}\`
+export interface GithubClient {
+  createIssue (issue: Issue, issueLabel: string, body: string): Promise<number>
 
-${todoOccurrences.join('\n')}
- `
-}).join('\n\n')
-  return `
-_This issue origins from a TODO within the code-base and was synchronized automatically._
+  updateIssue (issueNumber: number, body: string): Promise<void>
 
-## Occurrences
-${fileOccurrences}
-`
+  listOpenTodoIssues (issueLabel: string): Promise<PartialGithubIssue[]>
+
+  closeIssue (issueNumber: number)
 }
 
 export class RestGithubClient implements GithubClient {
@@ -50,19 +36,29 @@ export class RestGithubClient implements GithubClient {
     })
   }
 
-  async createIssue (issue: Issue, issueLabel: string, commitHash: string): Promise<number> {
+  async createIssue (issue: Issue, issueLabel: string, body: string): Promise<number> {
     const { data } = await this.octokit.rest.issues.create({
       owner: this.repo.owner,
       repo: this.repo.name,
       title: issue.todos[0].text,
       labels: [issueLabel],
-      body: formatIssueBody(issue, this.repo, commitHash)
+      body
     })
     return data.number
   }
 
-  async listOpenTodoIssueNumbers (issueLabel: string): Promise<number[]> {
-    const issueNumbers = []
+  async updateIssue (issueNumber: number, body: string): Promise<void> {
+    const { data } = await this.octokit.rest.issues.update({
+      issue_number: issueNumber,
+      owner: this.repo.owner,
+      repo: this.repo.name,
+      body
+    })
+    return data.number
+  }
+
+  async listOpenTodoIssues (issueLabel: string): Promise<PartialGithubIssue[]> {
+    const partialIssues: PartialGithubIssue[] = []
     let lastPageSize = 100
     let page = 0
     while (lastPageSize === 100) {
@@ -75,9 +71,9 @@ export class RestGithubClient implements GithubClient {
         page
       })
       lastPageSize = data.length
-      issueNumbers.push(...data.map(issue => issue.number))
+      partialIssues.push(...data.map(({ number, body }) => ({ issueNumber: number, body })))
     }
 
-    return issueNumbers
+    return partialIssues
   }
 }
