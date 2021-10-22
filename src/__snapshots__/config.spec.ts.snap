@@ -2,6 +2,7 @@
 
 exports[`readRepositoryConfig reads 1`] = `
 Object {
+  "branch": "master",
   "filePatterns": Array [
     "**/*.ts?(x)",
     "**/*.js?(x)",

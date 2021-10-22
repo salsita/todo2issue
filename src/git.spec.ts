@@ -1,10 +1,10 @@
-import { getCurrentCommitHash } from './git'
+import { getCurrentBranchName } from './git'
 import { resolve } from 'path'
 
-
-describe('getCurrentCommitHash', () => {
+describe('getCurrentBranchName', () => {
   it('gets something', async () => {
-    const hash = await getCurrentCommitHash(resolve(__dirname,'../sample'))
-    expect(hash.length).toBe(40)
+    const branchName = await getCurrentBranchName(resolve(__dirname,'../sample'))
+    expect(typeof branchName).toBe('string')
+    expect(branchName.includes(' ')).toBe(false)
   })
 })

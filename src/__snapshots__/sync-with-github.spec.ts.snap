@@ -2,11 +2,73 @@
 
 exports[`syncWithGithub syncs 1`] = `
 Array [
-  "created issue #1 for Single line todo comment",
-  "created issue #2 for line comments",
-  "created issue #3 for line comments with reference",
-  "created issue #4 for With colon",
-  "created issue #5 for This one is from a sub-folder",
+  "created issue #1 for
+{
+  \\"todos\\": [
+    {
+      \\"filename\\": \\"src/index.ts\\",
+      \\"line\\": 1,
+      \\"tag\\": \\"TODO\\",
+      \\"text\\": \\"Single line todo comment\\"
+    }
+  ]
+}",
+  "created issue #2 for
+{
+  \\"todos\\": [
+    {
+      \\"filename\\": \\"src/index.ts\\",
+      \\"line\\": 16,
+      \\"tag\\": \\"TODO\\",
+      \\"text\\": \\"line comments\\"
+    }
+  ]
+}",
+  "created issue #3 for
+{
+  \\"todos\\": [
+    {
+      \\"filename\\": \\"src/index.ts\\",
+      \\"line\\": 20,
+      \\"tag\\": \\"TODO\\",
+      \\"text\\": \\"line comments with reference\\"
+    }
+  ]
+}",
+  "created issue #4 for
+{
+  \\"todos\\": [
+    {
+      \\"filename\\": \\"src/index.ts\\",
+      \\"line\\": 22,
+      \\"tag\\": \\"TODO\\",
+      \\"text\\": \\"With colon\\"
+    },
+    {
+      \\"filename\\": \\"src/index.ts\\",
+      \\"line\\": 24,
+      \\"tag\\": \\"TODO\\",
+      \\"text\\": \\"With colon\\"
+    },
+    {
+      \\"filename\\": \\"src/index.ts\\",
+      \\"line\\": 26,
+      \\"tag\\": \\"TODO\\",
+      \\"text\\": \\"With colon\\"
+    }
+  ]
+}",
+  "created issue #5 for
+{
+  \\"todos\\": [
+    {
+      \\"filename\\": \\"src/helpers/helper.ts\\",
+      \\"line\\": 1,
+      \\"tag\\": \\"TODO\\",
+      \\"text\\": \\"This one is from a sub-folder\\"
+    }
+  ]
+}",
   "listed issues #123, #124, #125, #126",
   "close issues #126",
 ]

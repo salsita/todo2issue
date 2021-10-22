@@ -13,7 +13,12 @@ describe('syncWithGithub', () => {
     const files = await findFiles(root, config.filePatterns)
     const todos = await scanForTodos(root, files)
     const issues = groupTodosToIssues(todos)
-    const mockGithubClient = new MockGithubClient()
+    const mockGithubClient = new MockGithubClient([
+      { issueNumber: 123, body: 'Some' },
+      { issueNumber: 124, body: 'Somewhat else' },
+      { issueNumber: 125, body: 'Completely else' },
+      { issueNumber: 126, body: 'Different league' }
+    ])
     await syncWithGitHub(issues, mockGithubClient, config.repo, 'TODO', 'master')
     expect(mockGithubClient.log).toMatchSnapshot()
   })

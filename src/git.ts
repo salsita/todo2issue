@@ -1,7 +1,7 @@
 import spawnAsync from '@expo/spawn-async'
 
-export async function getCurrentCommitHash (root: string) {
-  const { stdout } = await spawnAsync('git', ['rev-parse', '--verify', 'HEAD'], {
+export async function getCurrentBranchName (root: string) {
+  const { stdout } = await spawnAsync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
     cwd: root
   })
   return stdout.trim()

@@ -1,12 +1,12 @@
 import { groupTodosByFile, Issue } from './model'
 import { GitRepository } from './config'
 
-export function generateIssueBody (issue: Issue, repo: GitRepository, commitish: string): string {
+export function generateIssueBody (issue: Issue, repo: GitRepository, branch: string): string {
   const todosByFile = groupTodosByFile(issue.todos)
   const fileOccurrences = Array.from(todosByFile.entries())
     .map(([filename, todos]) => {
       const todoOccurrences = todos.map(todo =>
-        `-  [line ${todo.line}](https://github.com/${repo.owner}/${repo.name}/blob/${commitish}/${filename}#L${todo.line}) - ${todo.text}`
+        `-  [line ${todo.line}](https://github.com/${repo.owner}/${repo.name}/blob/${branch}/${filename}#L${todo.line}) - ${todo.text}`
       )
       return `
 ### \`${filename}\`

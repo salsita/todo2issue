@@ -9,14 +9,14 @@ export async function syncWithGitHub (
   githubClient: GithubClient,
   repo: GitRepository,
   issueLabel: string,
-  commitish: string,
+  branch: string,
   overwriteBody: boolean = false
 ) {
   const issuesToUpdate = issues.filter(issue => issue.issueNumber !== undefined)
   const issuesToCreate = issues.filter(issue => issue.issueNumber === undefined)
 
   for (const issue of issuesToCreate) {
-    const generatedContent = generateIssueBody(issue, repo, commitish)
+    const generatedContent = generateIssueBody(issue, repo, branch)
     const body = createBody(generatedContent)
     issue.issueNumber = await githubClient.createIssue(issue, issueLabel, body)
     console.log(`created issue #${issue.issueNumber}`)
@@ -32,7 +32,7 @@ export async function syncWithGitHub (
       continue
     }
 
-    const newGeneratedContent = generateIssueBody(issue, repo, commitish)
+    const newGeneratedContent = generateIssueBody(issue, repo, branch)
     const {
       updated,
       body
