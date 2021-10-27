@@ -7,6 +7,7 @@ At the first run, it:
 - finds TODOs and FIXMEs in your code
 - groups them using their text
 - creates a GitHub issue for each group with a specific label
+- optionally assigns a user to the issue based on the author of the label (see `authorsByEmail` configuration option)
 - references the issue in the code-base like `TODO(#123) Do something`
 
 When ran again, it:
@@ -56,7 +57,10 @@ Then you should configure behavior of the tool using `todo2issue` property:
       "**/*.js?(x)"
     ],
     "issueLabel": "TODO",
-    "branch": "develop"
+    "branch": "develop",
+    "authorsByEmail": {
+      "jirist@salsitasoft.com": "goce-cz"
+    }
   },
   // ...  
 }
@@ -71,6 +75,9 @@ Then you should configure behavior of the tool using `todo2issue` property:
   - this label **MUST NOT** be assigned / unassigned manually
 - `branch` - name of the branch to be used when referencing code from the generated issues
   - defaults to active Git branch, but it is highly recommended fixing this in the config 
+- `authorsByEmail` - mapping between email of a commit author and a GitHub username
+  - if present, authors of TODOs are assigned to the created issues
+  - if present, and a mapping for particular email is missing, the sync fails (can be overridden by `--ignore-unresolved-users`)  
 
 ### GitHub token
 The tool needs GitHub personal access token to interact with GitHub API on your behalf.

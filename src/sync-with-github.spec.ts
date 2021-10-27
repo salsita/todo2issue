@@ -8,7 +8,7 @@ import { readConfig } from './config'
 
 describe('syncWithGithub', () => {
   it('syncs', async () => {
-    const root = resolve(__dirname, '../sample')
+    const root = resolve(__dirname, '../')
     const config = await readConfig(root)
     const files = await findFiles(root, config.filePatterns)
     const todos = await scanForTodos(root, files)
@@ -19,7 +19,7 @@ describe('syncWithGithub', () => {
       { issueNumber: 125, body: 'Completely else' },
       { issueNumber: 126, body: 'Different league' }
     ])
-    await syncWithGitHub(issues, mockGithubClient, config.repo, 'TODO', 'master')
+    await syncWithGitHub(issues, mockGithubClient, config.repo, 'TODO', 'master', false)
     expect(mockGithubClient.log).toMatchSnapshot()
   })
 })

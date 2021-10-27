@@ -17,8 +17,8 @@ export class MockGithubClient implements GithubClient {
     return issueNumber
   }
 
-  async updateIssue (issueNumber: number, body: string): Promise<void> {
-    this.log.push(`updated issue #${issueNumber}`)
+  async updateIssue (issue: Issue, body: string): Promise<void> {
+    this.log.push(`updated issue #${issue.issueNumber}`)
   }
 
   async listOpenTodoIssues (issueLabel: string): Promise<PartialGithubIssue[]> {

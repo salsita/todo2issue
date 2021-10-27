@@ -9,6 +9,7 @@ import { updateReferences } from './update-references'
 import { readConfig } from './config'
 import { RestGithubClient } from './github'
 import { WriteMockGithubClient } from './mock-github'
+import { findAuthors } from './find-authors'
 
 async function run (args: string[]) {
   const { argv } = yargs(args).options({
@@ -27,16 +28,32 @@ async function run (args: string[]) {
       default: false,
       alias: 'dry-run',
       description: 'simulate GitHub operations; generates new issue numbers locally'
+    },
+    'o': {
+      type: 'boolean',
+      alias: 'overwrite',
+      description: 'overwrite existing issues (body and assignments)'
+    },
+    'i': {
+      type: 'boolean',
+      alias: 'ignore-unresolved-authors',
+      description: 'ignore authors that can be resolved using the mapping in `package.json`'
     }
   })
   const token = argv['token']
   const root = argv['root'] ?? process.cwd()
   const dryRun = argv['dry-run']
-  const overwriteBody = argv['overwrite-body']
+  const overwrite = argv['overwrite']
+  const ignoreUnresolvedAuthors = argv['ignore-unresolved-authors']
 
   const config = await readConfig(root, token)
   const files = await findFiles(root, config.filePatterns)
   const todos = await scanForTodos(root, files)
+
+  if (config.authorsByEmail) {
+    await findAuthors(root, todos, config.authorsByEmail, )
+  }
+
   const issues = groupTodosToIssues(todos)
 
   const githubClient = new RestGithubClient(config.repo, config.githubToken)
@@ -48,7 +65,8 @@ async function run (args: string[]) {
       config.repo,
       config.issueLabel,
       config.branch,
-      overwriteBody
+      !!config.authorsByEmail,
+      overwrite
     )
   } catch (e) {
     console.error(e)

@@ -20,6 +20,7 @@ export interface Config {
   repo: GitRepository
   issueLabel: string
   branch: string
+  authorsByEmail?: Record<string, string>
 }
 
 const defaultConfig: Partial<Config> = {
@@ -33,7 +34,7 @@ async function readGithubToken (root: string): Promise<string | undefined> {
   }
   const envFile = resolve(root, '.env')
   const dotenv = existsSync(envFile) && parseDotenv(await readFile(envFile))
-  return dotenv?.GITHUB_TOKEN
+  return (dotenv && dotenv.GITHUB_TOKEN) || undefined
 }
 
 export async function readConfig (root: string, githubTokenOverride?: string): Promise<Config> {
@@ -47,7 +48,8 @@ export async function readConfig (root: string, githubTokenOverride?: string): P
     todo2issue: {
       issueLabel = defaultConfig.issueLabel,
       filePatterns = defaultConfig.filePatterns,
-      branch = await getCurrentBranchName(root)
+      branch = await getCurrentBranchName(root),
+      authorsByEmail
     } = defaultConfig,
   } = await readJsonAsync(resolve(root, 'package.json'))
 
@@ -74,6 +76,7 @@ export async function readConfig (root: string, githubTokenOverride?: string): P
     branch,
     filePatterns,
     issueLabel,
+    authorsByEmail,
     repo: { name, owner }
   }
 }

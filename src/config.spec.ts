@@ -3,7 +3,7 @@ import { resolve } from 'path'
 
 describe('readRepositoryConfig', () => {
   it('reads', async () => {
-    const { githubToken, ...rest } = await readConfig(resolve(__dirname, '../sample'))
+    const { githubToken, ...rest } = await readConfig(resolve(__dirname, '../'))
     expect(githubToken?.length).toBeGreaterThan(5)
     expect(rest).toMatchSnapshot()
   })

@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseBlameInfo parses blame info 1`] = `
+Array [
+  Object {
+    "author": Object {
+      "email": "jirist@salsitasoft.com",
+      "name": "Jiří Staniševský",
+      "time": 1634279203,
+      "timeZone": "+0200",
+    },
+    "commitHash": "aa73a7deb88f1487c0006abcd3b684bf91c2266e",
+    "committer": Object {
+      "email": "<jirist@salsitasoft.com>",
+      "name": "Jiří Staniševský",
+      "time": 1634279340,
+      "timeZone": "+0200",
+    },
+    "filename": "sample/src/index.ts",
+    "lineEnd": 1,
+    "lineStart": 1,
+    "summary": "Add sample \\"code-base\\"",
+    "text": Array [
+      "	// TODO Single line todo comment",
+    ],
+  },
+  Object {
+    "author": Object {
+      "email": "jirist@salsitasoft.com",
+      "name": "Jiří Staniševský",
+      "time": 1634279489,
+      "timeZone": "+0200",
+    },
+    "commitHash": "be1ec0218067e7152167afaf1de0f84e6c55fd43",
+    "committer": Object {
+      "email": "<jirist@salsitasoft.com>",
+      "name": "Jiří Staniševský",
+      "time": 1634281973,
+      "timeZone": "+0200",
+    },
+    "filename": "sample/src/index.ts",
+    "lineEnd": 4,
+    "lineStart": 4,
+    "summary": "Scanning WiP",
+    "text": Array [
+      "	// TODO(#123) Same reference different comment",
+    ],
+  },
+]
+`;

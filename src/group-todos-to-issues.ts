@@ -6,10 +6,10 @@ export function groupTodosToIssues(todos: Todo[]): Issue[] {
   todos
     .filter((todo) => !!todo.issueNumber)
     .forEach((todo) => {
-      let issue = issuesByNumber.get(todo.issueNumber)
+      let issue = issuesByNumber.get(todo.issueNumber!)
       if (!issue) {
         issue = { todos: [], issueNumber: todo.issueNumber }
-        issuesByNumber.set(todo.issueNumber, issue)
+        issuesByNumber.set(todo.issueNumber!, issue)
         issues.push(issue)
       }
 

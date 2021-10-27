@@ -2,10 +2,13 @@
 
 exports[`readRepositoryConfig reads 1`] = `
 Object {
+  "authorsByEmail": Object {
+    "jirist@salsitasoft.com": "goce-cz",
+  },
   "branch": "master",
   "filePatterns": Array [
-    "**/*.ts?(x)",
-    "**/*.js?(x)",
+    "sample/**/*.ts?(x)",
+    "sample/**/*.js?(x)",
   ],
   "issueLabel": "TODO",
   "repo": Object {

@@ -1,4 +1,4 @@
-import { groupTodosByFile, Issue } from './model'
+import { Issue } from './model'
 import { Octokit } from '@octokit/rest'
 import { GitRepository } from './config'
 
@@ -8,13 +8,13 @@ export interface PartialGithubIssue {
 }
 
 export interface GithubClient {
-  createIssue (issue: Issue, issueLabel: string, body: string): Promise<number>
+  createIssue (issue: Issue, issueLabel: string, body: string, assignees: string[] | undefined): Promise<number>
 
-  updateIssue (issueNumber: number, body: string): Promise<void>
+  updateIssue (issue: Issue, body: string, assignees: string[] | undefined): Promise<void>
 
   listOpenTodoIssues (issueLabel: string): Promise<PartialGithubIssue[]>
 
-  closeIssue (issueNumber: number)
+  closeIssue (issueNumber: number): Promise<void>
 }
 
 export class RestGithubClient implements GithubClient {
@@ -36,25 +36,26 @@ export class RestGithubClient implements GithubClient {
     })
   }
 
-  async createIssue (issue: Issue, issueLabel: string, body: string): Promise<number> {
+  async createIssue (issue: Issue, issueLabel: string, body: string, assignees: string[] | undefined): Promise<number> {
     const { data } = await this.octokit.rest.issues.create({
       owner: this.repo.owner,
       repo: this.repo.name,
       title: issue.todos[0].text,
       labels: [issueLabel],
+      assignees,
       body
     })
     return data.number
   }
 
-  async updateIssue (issueNumber: number, body: string): Promise<void> {
-    const { data } = await this.octokit.rest.issues.update({
-      issue_number: issueNumber,
+  async updateIssue (issue: Issue, body: string, assignees: string[] | undefined): Promise<void> {
+    await this.octokit.rest.issues.update({
+      issue_number: issue.issueNumber,
       owner: this.repo.owner,
       repo: this.repo.name,
+      assignees,
       body
     })
-    return data.number
   }
 
   async listOpenTodoIssues (issueLabel: string): Promise<PartialGithubIssue[]> {
@@ -66,12 +67,12 @@ export class RestGithubClient implements GithubClient {
       const { data } = await this.octokit.rest.issues.listForRepo({
         owner: this.repo.owner,
         repo: this.repo.name,
-        labels: [issueLabel],
+        labels: issueLabel,
         per_page: 100,
         page
       })
       lastPageSize = data.length
-      partialIssues.push(...data.map(({ number, body }) => ({ issueNumber: number, body })))
+      partialIssues.push(...data.map(({ number, body }) => ({ issueNumber: number, body: body ?? '' })))
     }
 
     return partialIssues

@@ -6,7 +6,7 @@ Array [
 {
   \\"todos\\": [
     {
-      \\"filename\\": \\"src/index.ts\\",
+      \\"filename\\": \\"sample/src/index.ts\\",
       \\"line\\": 1,
       \\"tag\\": \\"TODO\\",
       \\"text\\": \\"Single line todo comment\\"
@@ -17,7 +17,7 @@ Array [
 {
   \\"todos\\": [
     {
-      \\"filename\\": \\"src/index.ts\\",
+      \\"filename\\": \\"sample/src/index.ts\\",
       \\"line\\": 16,
       \\"tag\\": \\"TODO\\",
       \\"text\\": \\"line comments\\"
@@ -28,7 +28,7 @@ Array [
 {
   \\"todos\\": [
     {
-      \\"filename\\": \\"src/index.ts\\",
+      \\"filename\\": \\"sample/src/index.ts\\",
       \\"line\\": 20,
       \\"tag\\": \\"TODO\\",
       \\"text\\": \\"line comments with reference\\"
@@ -39,19 +39,19 @@ Array [
 {
   \\"todos\\": [
     {
-      \\"filename\\": \\"src/index.ts\\",
+      \\"filename\\": \\"sample/src/index.ts\\",
       \\"line\\": 22,
       \\"tag\\": \\"TODO\\",
       \\"text\\": \\"With colon\\"
     },
     {
-      \\"filename\\": \\"src/index.ts\\",
+      \\"filename\\": \\"sample/src/index.ts\\",
       \\"line\\": 24,
       \\"tag\\": \\"TODO\\",
       \\"text\\": \\"With colon\\"
     },
     {
-      \\"filename\\": \\"src/index.ts\\",
+      \\"filename\\": \\"sample/src/index.ts\\",
       \\"line\\": 26,
       \\"tag\\": \\"TODO\\",
       \\"text\\": \\"With colon\\"
@@ -62,7 +62,7 @@ Array [
 {
   \\"todos\\": [
     {
-      \\"filename\\": \\"src/helpers/helper.ts\\",
+      \\"filename\\": \\"sample/src/helpers/helper.ts\\",
       \\"line\\": 1,
       \\"tag\\": \\"TODO\\",
       \\"text\\": \\"This one is from a sub-folder\\"

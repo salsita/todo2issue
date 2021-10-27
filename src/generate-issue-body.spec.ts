@@ -5,7 +5,7 @@ import { generateIssueBody } from './generate-issue-body'
 
 describe('generateIssueBody', () => {
   it('generates description of issue', async () => {
-    const config = await readConfig(resolve(__dirname, '../sample'))
+    const config = await readConfig(resolve(__dirname, '../'))
     const body = generateIssueBody({
       todos: [
         {

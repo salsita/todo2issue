@@ -1,0 +1,153 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`groupTodosToIssues groups 1`] = `
+Array [
+  Object {
+    "issueNumber": 123,
+    "todos": Array [
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": 123,
+        "line": 2,
+        "tag": "TODO",
+        "text": "Single line todo comment with reference",
+      },
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": 123,
+        "line": 4,
+        "tag": "TODO",
+        "text": "Same reference different comment",
+      },
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 5,
+        "tag": "TODO",
+        "text": "Same reference different comment",
+      },
+    ],
+  },
+  Object {
+    "issueNumber": 124,
+    "todos": Array [
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": 124,
+        "line": 12,
+        "tag": "TODO",
+        "text": "Multiline todo",
+      },
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 7,
+        "tag": "TODO",
+        "text": "Multiline todo",
+      },
+      Object {
+        "filename": "src/helpers/helper.ts",
+        "issueNumber": undefined,
+        "line": 4,
+        "tag": "TODO",
+        "text": "Multiline todo",
+      },
+    ],
+  },
+  Object {
+    "issueNumber": 125,
+    "todos": Array [
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": 125,
+        "line": 19,
+        "tag": "TODO",
+        "text": "Multiple single",
+      },
+      Object {
+        "filename": "src/helpers/helper.ts",
+        "issueNumber": 125,
+        "line": 7,
+        "tag": "TODO",
+        "text": "Related issue",
+      },
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 15,
+        "tag": "TODO",
+        "text": "Multiple single",
+      },
+    ],
+  },
+  Object {
+    "todos": Array [
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 1,
+        "tag": "TODO",
+        "text": "Single line todo comment",
+      },
+    ],
+  },
+  Object {
+    "todos": Array [
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 16,
+        "tag": "TODO",
+        "text": "line comments",
+      },
+    ],
+  },
+  Object {
+    "todos": Array [
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 20,
+        "tag": "TODO",
+        "text": "line comments with reference",
+      },
+    ],
+  },
+  Object {
+    "todos": Array [
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 22,
+        "tag": "TODO",
+        "text": "With colon",
+      },
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 24,
+        "tag": "TODO",
+        "text": "With colon",
+      },
+      Object {
+        "filename": "src/index.ts",
+        "issueNumber": undefined,
+        "line": 26,
+        "tag": "TODO",
+        "text": "With colon",
+      },
+    ],
+  },
+  Object {
+    "todos": Array [
+      Object {
+        "filename": "src/helpers/helper.ts",
+        "issueNumber": undefined,
+        "line": 1,
+        "tag": "TODO",
+        "text": "This one is from a sub-folder",
+      },
+    ],
+  },
+]
+`;

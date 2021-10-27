@@ -4,11 +4,13 @@ export interface Todo {
   text: string
   tag: string
   issueNumber?: number
+  author?: string
 }
 
 export interface Issue {
   todos: Todo[]
   issueNumber?: number
+  assignees?: string[]
 }
 
 
