@@ -1,18 +1,12 @@
 import { groupTodosByFile, Todo } from './model'
 import { blameFile } from './git'
 
-const range = (start: number, endInclusive: number) => new Array(endInclusive - start + 1).fill(null).map((_, index) => start + index)
-
 export async function findAuthors (root: string, todos: Todo[], authorsByEmail: Record<string, string>, ignoreUnresolvedAuthors: boolean = false) {
   const todosByFile = groupTodosByFile(todos)
   const missingAuthorEmails = new Set<string>()
   for (const [file, fileTodos] of todosByFile.entries()) {
     const blameInfos = await blameFile(root, file, fileTodos.map(todo => todo.line))
-    const blamesPerLine = new Map(
-      blameInfos.flatMap(blameInfo =>
-        range(blameInfo.lineStart, blameInfo.lineEnd).map(line => [line, blameInfo])
-      )
-    )
+    const blamesPerLine = new Map(blameInfos.map(blameInfo => [blameInfo.lineAfter, blameInfo]))
     todos.forEach(todo => {
       const blameInfo = blamesPerLine.get(todo.line)
       if(blameInfo && blameInfo.author.email !== 'not.committed.yet') {

@@ -1,3 +1,7 @@
+# v1.1.1
+## Fixes
+- Fix parsing of git blame output
+
 # v1.1.0
 ## Features
 - Assign issues to TODO authors on GitHub

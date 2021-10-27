@@ -17,15 +17,16 @@ export interface Contribution {
 export interface BlameInfo {
   commitHash: string
   filename: string
-  lineStart: number
-  lineEnd: number
+  lineBefore: number
+  lineAfter: number
+  lineCount: number
   author: Contribution
   committer: Contribution
   summary: string
   text: string[]
 }
 
-const leadingLinePattern = /^([a-z0-9]{40}) ([0-9]+) ([0-9]+) ([0-9]+)$/
+const leadingLinePattern = /^([a-z0-9]{40}) ([0-9]+) ([0-9]+)( ([0-9]+))?$/
 const keyValuePattern = /^([a-z\-]+) (.+)$/
 
 const unwrapEmail = (email: string) => (/^<(.+)>$/.exec(email) ?? [undefined, email] as const)[1]
@@ -34,15 +35,16 @@ export function parseBlameInfo (blameOutput: string): BlameInfo[] {
   const results: BlameInfo[] = []
   let lastInfo: BlameInfo | null = null
   for (const line of blameOutput.split('\n')) {
-    const [, commitHash, lineStart, lineEnd] = leadingLinePattern.exec(line) ?? []
-    if (commitHash) {
-      if (lastInfo != null) {
-        results.push(lastInfo as BlameInfo)
+    if(!lastInfo) {
+      const [, commitHash, lineBefore, lineAfter, , lineCount = '1'] = leadingLinePattern.exec(line) ?? []
+      if (!commitHash) {
+        throw new Error(`expected leading line with hash and line numbers, got:\n\t${line}`)
       }
       lastInfo = {
         commitHash,
-        lineStart: Number(lineStart),
-        lineEnd: Number(lineEnd),
+        lineBefore: Number(lineBefore),
+        lineAfter: Number(lineAfter),
+        lineCount: Number(lineCount),
         text: [],
         author: {} as Contribution,
         committer: {} as Contribution,
@@ -52,14 +54,10 @@ export function parseBlameInfo (blameOutput: string): BlameInfo[] {
       continue
     }
 
-    if (lastInfo == null) {
-      continue
-    }
-
     if (lastInfo.filename != undefined) {
-      if (lastInfo.text.length <= (lastInfo.lineEnd - lastInfo.lineStart)) {
-        lastInfo.text.push(line)
-      }
+      lastInfo.text.push(line)
+      results.push(lastInfo)
+      lastInfo = null
       continue
     }
 
@@ -96,10 +94,6 @@ export function parseBlameInfo (blameOutput: string): BlameInfo[] {
         lastInfo.filename = value
         break
     }
-  }
-
-  if (lastInfo != null) {
-    results.push(lastInfo)
   }
 
   return results

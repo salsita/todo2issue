@@ -1,6 +1,6 @@
 {
   "name": "todo2issue",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "CLI tool for in-code TODO synchronization to GitHub issues",
   "main": "lib/index.js",
   "scripts": {
