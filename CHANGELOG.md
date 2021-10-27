@@ -1,3 +1,7 @@
+# v1.1.2
+## Fixes
+- Actually release the new compiled code
+
 # v1.1.1
 ## Fixes
 - Fix parsing of git blame output

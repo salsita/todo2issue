@@ -1,12 +1,13 @@
 {
   "name": "todo2issue",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "CLI tool for in-code TODO synchronization to GitHub issues",
   "main": "lib/index.js",
   "scripts": {
     "test": "jest --config jest.config.js",
     "build": "tsc -b",
-    "watch": "tsc -b -w"
+    "watch": "tsc -b -w",
+    "prepublishOnly": "npm run build"
   },
   "bin": {
     "todo2issue": "./lib/bin.js"
