@@ -1,3 +1,8 @@
+# v1.2.0
+## Features
+- Allow supplying the `authorsByEmail` mapping through environment variable
+  to avoid leaking sensitive data to the repository
+
 # v1.1.2
 ## Fixes
 - Actually release the new compiled code

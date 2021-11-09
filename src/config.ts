@@ -28,20 +28,16 @@ const defaultConfig: Partial<Config> = {
   issueLabel: 'TODO'
 }
 
-async function readGithubToken (root: string): Promise<string | undefined> {
-  if (process.env.GITHUB_TOKEN) {
-    return process.env.GITHUB_TOKEN
-  }
-  const envFile = resolve(root, '.env')
-  const dotenv = existsSync(envFile) && parseDotenv(await readFile(envFile))
-  return (dotenv && dotenv.GITHUB_TOKEN) || undefined
-}
-
 export async function readConfig (root: string, githubTokenOverride?: string): Promise<Config> {
-  const githubToken = githubTokenOverride ?? await readGithubToken(root)
+  const envFile = resolve(root, '.env')
+  const dotenv = (existsSync(envFile) && parseDotenv(await readFile(envFile))) || undefined
+
+  const githubToken = githubTokenOverride ?? process.env.GITHUB_TOKEN ?? dotenv?.GITHUB_TOKEN
   if (!githubToken || githubToken.trim() === '') {
     throw new Error(`Github personal token missing, please provide it either through 'GITHUB_TOKEN' environment variable ('.env' is supported) or as a '--token' command line option`)
   }
+
+  const authorsByEmailFromEnv = process.env.AUTHORS_BY_EMAIL ?? dotenv?.AUTHORS_BY_EMAIL
 
   const {
     repository,
@@ -49,7 +45,7 @@ export async function readConfig (root: string, githubTokenOverride?: string): P
       issueLabel = defaultConfig.issueLabel,
       filePatterns = defaultConfig.filePatterns,
       branch = await getCurrentBranchName(root),
-      authorsByEmail
+      authorsByEmail = authorsByEmailFromEnv && JSON.parse(authorsByEmailFromEnv)
     } = defaultConfig,
   } = await readJsonAsync(resolve(root, 'package.json'))
 

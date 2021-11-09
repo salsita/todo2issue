@@ -77,7 +77,8 @@ Then you should configure behavior of the tool using `todo2issue` property:
   - defaults to active Git branch, but it is highly recommended fixing this in the config 
 - `authorsByEmail` - mapping between email of a commit author and a GitHub username
   - if present, authors of TODOs are assigned to the created issues
-  - if present, and a mapping for particular email is missing, the sync fails (can be overridden by `--ignore-unresolved-users`)  
+  - if present, and a mapping for particular email is missing, the sync fails (can be overridden by `--ignore-unresolved-users`)
+  - if the emails and/or usernames are considered sensitive, one can supply the mapping as a JSON object serialized into a `AUTHORS_BY_EMAIL` environment variable  
 
 ### GitHub token
 The tool needs GitHub personal access token to interact with GitHub API on your behalf.
