@@ -1,3 +1,7 @@
+# v1.2.1
+## Fixes
+- Use default issue title in case the TODO doesn't have any text
+  
 # v1.2.0
 ## Features
 - Allow supplying the `authorsByEmail` mapping through environment variable

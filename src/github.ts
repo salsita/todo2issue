@@ -40,7 +40,7 @@ export class RestGithubClient implements GithubClient {
     const { data } = await this.octokit.rest.issues.create({
       owner: this.repo.owner,
       repo: this.repo.name,
-      title: issue.todos[0].text,
+      title: issue.todos[0].text || 'Untitled TODO',
       labels: [issueLabel],
       assignees,
       body
